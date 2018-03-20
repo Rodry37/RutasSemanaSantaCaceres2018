@@ -3,6 +3,7 @@ package com.imovil.uo239737.rutassemanasantacaceres2018;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -23,7 +24,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Ruta> routes;
+    FragmentManager fragmentManager;
+    ListFragment fragment;
     private final String url = "http://opendata.caceres.es/GetData/GetData?dataset=om:RutaProcesion&year=2018&format=json";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
             t.show();
         }
 
+        fragmentManager = getSupportFragmentManager();
+        fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment);
     }
 
     public boolean isOnline() {
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadRoutesFromJSON(){
-        routes = new ArrayList<>();
+        Routes.list = new ArrayList<>();
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -75,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         };
 
 
-                        routes.add(r);
+                        Routes.list.add(r);
 
 
                     }

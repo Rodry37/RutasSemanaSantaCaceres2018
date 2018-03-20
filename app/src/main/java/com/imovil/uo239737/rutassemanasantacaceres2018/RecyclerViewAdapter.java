@@ -30,12 +30,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void onBindViewHolder
             (RecyclerViewAdapter.ViewHolder viewHolder, int i) {
-
+        viewHolder.NombreRuta.setText(Routes.list.get(i).getNombre());
 
     }
 
     public int getItemCount() {
-        return 0;
+        return Routes.list.size();
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder{
