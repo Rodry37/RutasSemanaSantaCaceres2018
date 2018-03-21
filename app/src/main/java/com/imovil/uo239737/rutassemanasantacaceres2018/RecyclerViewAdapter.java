@@ -34,6 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+
     public int getItemCount() {
         return Routes.list.size();
     }
