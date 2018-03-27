@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                             CharSequence mens = getString(R.string.toast_load_ok);
                             Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
                             t.show();
+                            fragment.updateAdapter();
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.err.print("Error: onResponse()");

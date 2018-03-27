@@ -45,4 +45,8 @@ public class ListFragment extends Fragment {
         return rootView;
     }
 
+    public void updateAdapter(){
+        adapter.notifyDataSetChanged();
+    }
+
 }
