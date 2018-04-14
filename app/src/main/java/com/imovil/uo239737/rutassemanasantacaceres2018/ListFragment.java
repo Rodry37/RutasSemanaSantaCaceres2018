@@ -6,17 +6,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 /**
  * Created by Rodry on 19/03/2018.
  */
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements AdapterView.OnItemClickListener {
+    public interface Callbacks {
+        void onRutaSelected(Ruta ruta);
+    }
+
     RecyclerViewAdapter adapter;
+    Callbacks callback;
 
     public static ListFragment newInstance() {
 
@@ -25,10 +32,16 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity activity) {
 
-        super.onAttach(context);
-        adapter = new RecyclerViewAdapter(context);
+        super.onAttach(activity);
+        try{
+            callback = (Callbacks) activity;
+        }
+        catch (ClassCastException e){
+            Log.e("MYAPP","Error in onAttach List Fragment");
+            e.printStackTrace();
+        }
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,4 +62,10 @@ public class ListFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                        long id) {
+        Ruta ruta = (Ruta) parent.getItemAtPosition(position);
+        callback.onRutaSelected(ruta);
+    }
 }

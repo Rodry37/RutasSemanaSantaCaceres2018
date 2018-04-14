@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     public LayoutInflater inflater;
+    CustomOnClick customOnClick;
 
     public RecyclerViewAdapter(Context context){
         this.inflater = LayoutInflater.from(context);
@@ -39,13 +40,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return Routes.list.size();
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder{
+    protected final class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView NombreRuta;
 
         public ViewHolder(View itemView){
             super(itemView);
 
             NombreRuta = (TextView) itemView.findViewById(R.id.lbNombreRuta);
+        }
+
+        @Override
+        public void onClick(View view) {
+            customOnClick.onClickEvent(Routes.list.get(getLayoutPosition()), getLayoutPosition());
         }
     }
 }
