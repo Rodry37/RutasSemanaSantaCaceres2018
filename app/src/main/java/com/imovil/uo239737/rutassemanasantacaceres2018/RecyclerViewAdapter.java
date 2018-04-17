@@ -16,8 +16,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public LayoutInflater inflater;
     CustomOnClick customOnClick;
 
-    public RecyclerViewAdapter(Context context){
+    public RecyclerViewAdapter(Context context, CustomOnClick customOnClick){
         this.inflater = LayoutInflater.from(context);
+        customOnClick = customOnClick;
     }
 
 
@@ -51,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View view) {
-            customOnClick.onClickEvent(Routes.list.get(getLayoutPosition()), getLayoutPosition());
+            customOnClick.onClickEvent(Routes.list.get(getLayoutPosition()));
         }
     }
 }

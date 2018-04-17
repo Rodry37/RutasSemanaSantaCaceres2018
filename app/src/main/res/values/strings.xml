@@ -3,4 +3,7 @@
     <string name="toast_load_ok">Datos cargados correctamente</string>
     <string name="toast_load_fail">Error al cargar los datos</string>
     <string name="toast_no_network">No se ha podido establecer una conexión</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

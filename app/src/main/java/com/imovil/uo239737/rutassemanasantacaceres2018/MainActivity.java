@@ -1,6 +1,7 @@
 package com.imovil.uo239737.rutassemanasantacaceres2018;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CustomOnClick{
 
     FragmentManager fragmentManager;
     ListFragment fragment;
@@ -136,5 +137,13 @@ public class MainActivity extends AppCompatActivity {
             System.err.print("Error while parsing date");
         }
         return new Date();
+    }
+
+
+    @Override
+    public void onClickEvent(Ruta ruta) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra("RUTA", ruta);
+        startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package com.imovil.uo239737.rutassemanasantacaceres2018;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -7,7 +8,8 @@ import java.util.Date;
  * Created by Rodry on 16/03/2018.
  */
 
-public class Ruta {
+@SuppressWarnings("serial")
+public class Ruta implements Serializable{
     private String Uri;
     private String Nombre;
     private Date Fecha_salida;

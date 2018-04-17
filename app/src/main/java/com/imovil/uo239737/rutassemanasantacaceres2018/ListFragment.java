@@ -17,13 +17,13 @@ import android.widget.ListView;
  * Created by Rodry on 19/03/2018.
  */
 
-public class ListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ListFragment extends Fragment {
     public interface Callbacks {
         void onRutaSelected(Ruta ruta);
     }
 
     RecyclerViewAdapter adapter;
-    Callbacks callback;
+    private CustomOnClick customOnClick;
 
     public static ListFragment newInstance() {
 
@@ -32,15 +32,20 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context context) {
 
-        super.onAttach(activity);
-        try{
-            callback = (Callbacks) activity;
+        super.onAttach(context);
+        Activity activity = getActivity();
+        if(activity != null) {
+            try {
+                customOnClick = (CustomOnClick) activity;
+            } catch (ClassCastException e) {
+                Log.e("MYAPP", "Error in onAttach List Fragment");
+                e.printStackTrace();
+            }
         }
-        catch (ClassCastException e){
-            Log.e("MYAPP","Error in onAttach List Fragment");
-            e.printStackTrace();
+        else{
+            Log.e("MYAPP", "Error en onattach de list fragment: Activity null");
         }
     }
 
@@ -50,7 +55,7 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         rootView = inflater.inflate(R.layout.list_fragment, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rvItems);
-        adapter = new RecyclerViewAdapter(this.getActivity());
+        adapter = new RecyclerViewAdapter(this.getActivity(), customOnClick);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -62,10 +67,4 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                        long id) {
-        Ruta ruta = (Ruta) parent.getItemAtPosition(position);
-        callback.onRutaSelected(ruta);
-    }
 }
