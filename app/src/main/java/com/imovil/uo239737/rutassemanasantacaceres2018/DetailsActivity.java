@@ -5,19 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class DetailsActivity extends AppCompatActivity {
+    int position;
+    public static final String RUTA = "RUTA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        Ruta ruta = (Ruta) intent.getSerializableExtra("RUTA");
+        position =  intent.getIntExtra(DetailsActivity.RUTA, 0);
         setContentView(R.layout.detail_activity);
 
         if(findViewById(R.id.frgDetail) != null){
             if (savedInstanceState != null) {
                 return;
             }
-            DetailFragment detailFragment = DetailFragment.newInstance(ruta);
+            DetailFragment detailFragment = DetailFragment.newInstance(position);
+            getSupportFragmentManager().beginTransaction().add(R.id.frgDetail, detailFragment).commit();
         }
     }
 }

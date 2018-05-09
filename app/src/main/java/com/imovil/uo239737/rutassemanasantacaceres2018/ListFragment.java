@@ -17,10 +17,8 @@ import android.widget.ListView;
  * Created by Rodry on 19/03/2018.
  */
 
-public class ListFragment extends Fragment {
-    public interface Callbacks {
-        void onRutaSelected(Ruta ruta);
-    }
+public class ListFragment extends Fragment  {
+
 
     RecyclerViewAdapter adapter;
     private CustomOnClick customOnClick;
@@ -39,6 +37,7 @@ public class ListFragment extends Fragment {
         if(activity != null) {
             try {
                 customOnClick = (CustomOnClick) activity;
+                adapter = new RecyclerViewAdapter(context, customOnClick);
             } catch (ClassCastException e) {
                 Log.e("MYAPP", "Error in onAttach List Fragment");
                 e.printStackTrace();
@@ -55,13 +54,16 @@ public class ListFragment extends Fragment {
         rootView = inflater.inflate(R.layout.list_fragment, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rvItems);
-        adapter = new RecyclerViewAdapter(this.getActivity(), customOnClick);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
         return rootView;
     }
+
+
 
     public void updateAdapter(){
         adapter.notifyDataSetChanged();

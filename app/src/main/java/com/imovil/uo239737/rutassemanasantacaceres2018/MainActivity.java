@@ -2,11 +2,13 @@ package com.imovil.uo239737.rutassemanasantacaceres2018;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,17 +25,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements CustomOnClick{
+public class MainActivity extends AppCompatActivity implements CustomOnClick {
 
     FragmentManager fragmentManager;
     ListFragment fragment;
+    ArrayList<Ruta> rutas;
     private final String url = "http://opendata.caceres.es/GetData/GetData?dataset=om:RutaProcesion&year=2018&format=json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        myToolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(myToolbar);
+
         loadRoutesFromJSON();
+
 
         fragmentManager = getSupportFragmentManager();
         fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment);
@@ -48,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick{
 
     public void loadRoutesFromJSON() {
         if (isOnline()) {
+            if (RoutesHolder.getRoutes().size() == 0) {
 
-            if (Routes.list == null) {
-                Routes.list = new ArrayList<>();
+                rutas = new ArrayList<>();
                 RequestQueue queue = Volley.newRequestQueue(this);
                 JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -76,11 +85,9 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick{
                                 }
                                 ;
 
-
-                                Routes.list.add(r);
-
-
+                                rutas.add(r);
                             }
+                            RoutesHolder.setRoutes(rutas);
 
                             CharSequence mens = getString(R.string.toast_load_ok);
                             Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
@@ -141,9 +148,14 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick{
 
 
     @Override
-    public void onClickEvent(Ruta ruta) {
+    public void onClickEvent(int pos) {
+        /*
+        TWO PANES
+        DetailFragment fragment = DetailFragment.newInstance(pos);
+        fragmentManager.beginTransaction().replace(R.id.fragment, fragment).commit();
+        */
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra("RUTA", ruta);
+        intent.putExtra(DetailsActivity.RUTA, pos);
         startActivity(intent);
     }
 }

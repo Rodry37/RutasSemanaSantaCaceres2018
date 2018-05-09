@@ -10,15 +10,16 @@ import android.view.ViewGroup;
 
 public class DetailFragment extends Fragment {
     private static final String ROUTE_ARG = "route";
+    int position;
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
-    public static DetailFragment newInstance(Ruta ruta) {
+    public static DetailFragment newInstance(int pos) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ROUTE_ARG, ruta);
+        args.putInt(ROUTE_ARG, pos);
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,10 +34,9 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.detail_fragment, container, false);
-        Ruta ruta;
         Bundle args = this.getArguments();
         if(args != null)
-            ruta = (Ruta) args.getSerializable(ROUTE_ARG);
+            position = args.getInt(ROUTE_ARG);
 
 
         return rootview;

@@ -18,7 +18,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public RecyclerViewAdapter(Context context, CustomOnClick customOnClick){
         this.inflater = LayoutInflater.from(context);
-        customOnClick = customOnClick;
+        this.customOnClick = customOnClick;
     }
 
 
@@ -32,27 +32,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void onBindViewHolder
             (RecyclerViewAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.NombreRuta.setText(Routes.list.get(i).getNombre());
+        viewHolder.NombreRuta.setText(RoutesHolder.getRoutes().get(i).getNombre());
 
     }
 
 
     public int getItemCount() {
-        return Routes.list.size();
+        return RoutesHolder.getRoutes().size();
     }
 
-    protected final class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public final class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView NombreRuta;
 
         public ViewHolder(View itemView){
             super(itemView);
 
             NombreRuta = (TextView) itemView.findViewById(R.id.lbNombreRuta);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            customOnClick.onClickEvent(Routes.list.get(getLayoutPosition()));
+
+            customOnClick.onClickEvent(getLayoutPosition());
         }
     }
 }
