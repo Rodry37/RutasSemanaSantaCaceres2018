@@ -104,7 +104,21 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
                         CharSequence mens = getString(R.string.toast_load_fail);
                         Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
                         t.show();
-
+                        ArrayList<Ruta> rerr = new ArrayList<>();
+                        Ruta ro = new Ruta();
+                        ro.setNombre("asd");
+                        ro.setLugar_salida("asdf");
+                        ro.setLugar_llegada("fdsa");
+                        ro.setUri("ururuu");
+                        ArrayList<String> pasos = new ArrayList<>();
+                        pasos.add("Paso0");
+                        pasos.add("Paso1");
+                        pasos.add("Paso2");
+                        pasos.add("Paso3");
+                        ro.setPasos_Asociados(pasos);
+                        rerr.add(ro);
+                        RoutesHolder.setRoutes(rerr);
+                        fragment.updateAdapter();
                     }
                 });
                 queue.add(req);

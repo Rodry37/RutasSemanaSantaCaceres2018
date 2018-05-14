@@ -6,4 +6,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="details_nombre">Nombre:</string>
+    <string name="details_salida">Lugar de salida:</string>
+    <string name="details_llegada">Lugar de llegada</string>
+    <string name="details_URI">URL:</string>
+    <string name="details_fechasalida">Fecha de Salida:</string>
+    <string name="details_pasos">Pasos Asociados:</string>
+    <string name="details_button">Ver en el mapa</string>
 </resources>
