@@ -1,6 +1,7 @@
 package com.imovil.uo239737.rutassemanasantacaceres2018;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,7 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements Button.OnClickListener{
     private static final String ROUTE_ARG = "route";
     private int position;
 
@@ -59,6 +60,7 @@ public class DetailFragment extends Fragment {
         SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         lbFechasalida.setText(dateformat.format(RoutesHolder.getRoutes().get(position).getFecha_salida()));
         printPasos(lbPasos);
+        btMap.setOnClickListener(this);
 
         return rootview;
     }
@@ -83,4 +85,12 @@ public class DetailFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.btMap){
+            Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra(MapsActivity.PUNTOS, position);
+            startActivity(intent);
+        }
+    }
 }

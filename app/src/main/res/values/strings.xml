@@ -13,4 +13,8 @@
     <string name="details_fechasalida">Fecha de Salida:</string>
     <string name="details_pasos">Pasos Asociados:</string>
     <string name="details_button">Ver en el mapa</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="marker_title_start">"Inicio de la ruta: "</string>
+    <string name="marker_title_end">Fin de la ruta:</string>
+    <string name="marker_title_startend">Inicio y fin de la ruta:</string>
 </resources>

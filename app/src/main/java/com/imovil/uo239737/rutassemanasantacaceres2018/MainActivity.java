@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
                         CharSequence mens = getString(R.string.toast_load_fail);
                         Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
                         t.show();
+                        /*
                         ArrayList<Ruta> rerr = new ArrayList<>();
                         Ruta ro = new Ruta();
                         ro.setNombre("asd");
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
                         rerr.add(ro);
                         RoutesHolder.setRoutes(rerr);
                         fragment.updateAdapter();
+                        */
                     }
                 });
                 queue.add(req);
