@@ -2,13 +2,18 @@ package com.imovil.uo239737.rutassemanasantacaceres2018;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,6 +28,9 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements CustomOnClick {
@@ -30,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
     FragmentManager fragmentManager;
     ListFragment fragment;
     ArrayList<Ruta> rutas;
+    SharedPreferences prefs;
     private final String url = "http://opendata.caceres.es/GetData/GetData?dataset=om:RutaProcesion&year=2018&format=json";
 
     @Override
@@ -40,12 +49,19 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
         myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         myToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(myToolbar);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         loadRoutesFromJSON();
 
 
         fragmentManager = getSupportFragmentManager();
         fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     public boolean isOnline() {
@@ -87,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
 
                                 rutas.add(r);
                             }
-                            RoutesHolder.setRoutes(rutas);
+                            RoutesHolder.setRoutes(fragment.sortRoutes(rutas));
 
                             CharSequence mens = getString(R.string.toast_load_ok);
                             Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
@@ -151,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
     }
 
     private Date dateParser(String JSONdate) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {
             Date d = format.parse(JSONdate);
             return d;
@@ -174,4 +190,16 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
         intent.putExtra(DetailsActivity.RUTA, pos);
         startActivity(intent);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        if (item.getItemId() ==  R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

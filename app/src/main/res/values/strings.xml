@@ -17,4 +17,65 @@
     <string name="marker_title_start">"Inicio de la ruta: "</string>
     <string name="marker_title_end">Fin de la ruta:</string>
     <string name="marker_title_startend">Inicio y fin de la ruta:</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+    <string name="prefs_color_rojo">Rojo</string>
+    <string name="prefs_color_azul">Azul</string>
+    <string name="prefs_color_morado">Morado</string>
+    <string name="prefs_color_verde">Verde</string>
+    <string name="prefs_color_title">Color del mapa:</string>
+    <string name="prefs_order_title">Ordenar rutas por:</string>
+    <string name="prefs_order_name">Nombre</string>
+    <string name="prefs_order_day">Día</string>
+    <string name="menu_settings_title">Ajustes</string>
+
+    <!-- Example settings for Notifications -->
+
 </resources>

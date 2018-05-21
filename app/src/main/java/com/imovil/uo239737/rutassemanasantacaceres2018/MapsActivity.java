@@ -72,11 +72,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.addMarker(new MarkerOptions()
-                .position(trazado.get(0))
-                .title(getString(R.string.marker_title_start) + RoutesHolder.getRoutes().get(position).getLugar_llegada())
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
         if(RoutesHolder.getRoutes().get(position).getLugar_llegada() != RoutesHolder.getRoutes().get(position).getLugar_salida()){
             mMap.addMarker(new MarkerOptions()
                     .position(trazado.get(trazado.size()-1))

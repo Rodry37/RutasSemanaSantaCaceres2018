@@ -25,6 +25,7 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+
         if(findViewById(R.id.fgContainer) != null){
             if (savedInstanceState != null) {
                 return;

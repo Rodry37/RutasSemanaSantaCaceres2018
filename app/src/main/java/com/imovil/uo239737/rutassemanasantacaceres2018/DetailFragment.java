@@ -69,7 +69,20 @@ public class DetailFragment extends Fragment implements Button.OnClickListener{
         String pasosformat = "";
         ArrayList<String> pasos = RoutesHolder.getRoutes().get(position).getPasos_Asociados();
         for (String s : pasos){
-            pasosformat+=s + "\n";
+            String[] pasosformatsplitted = s.split("/");
+            pasosformatsplitted = pasosformatsplitted[pasosformatsplitted.length-1].replace('-',' ').split(" ");
+            for (int i = 0 ; i < pasosformatsplitted.length ; i++)
+                if (pasosformatsplitted[i].length() > 3)
+                    pasosformatsplitted[i] = pasosformatsplitted[i].substring(0,1)
+                            .toUpperCase()
+                            .concat(pasosformatsplitted[i].substring(1));
+
+
+            String pasosformatted = "";
+            for(int i = 0 ; i < pasosformatsplitted.length ; i++)
+                pasosformatted += pasosformatsplitted[i] + ' ';
+
+            pasosformat+= "-Paso Procesional " + pasosformatted + "\n";
         }
         lbPasos.setText(pasosformat);
     }
