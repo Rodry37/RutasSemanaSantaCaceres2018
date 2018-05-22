@@ -1,4 +1,4 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018;
+package com.imovil.uo239737.rutassemanasantacaceres2018.Model;
 
 /**
  * Created by Rodry on 17/05/2018.

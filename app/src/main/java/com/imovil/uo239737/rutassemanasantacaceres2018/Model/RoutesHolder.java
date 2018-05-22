@@ -1,4 +1,4 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018;
+package com.imovil.uo239737.rutassemanasantacaceres2018.Model;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ public class RoutesHolder {
     private static ArrayList<Ruta> list;
     public static ArrayList<Ruta> getRoutes() {
         if(list == null)
-            list = new ArrayList<Ruta>();
+            list = new ArrayList<>();
 
         return list;
     }

@@ -1,4 +1,4 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018;
+package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesList;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
+import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 
 /**
  * Created by Rodry on 19/03/2018.

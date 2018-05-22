@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.imovil.uo239737.rutassemanasantacaceres2018.ListFragment"
+        android:name="com.imovil.uo239737.rutassemanasantacaceres2018.RoutesList.ListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

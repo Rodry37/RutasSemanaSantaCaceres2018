@@ -1,4 +1,4 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018;
+package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesDetail;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.imovil.uo239737.rutassemanasantacaceres2018.R;
+
 public class DetailsActivity extends AppCompatActivity {
     int position;
     public static final String RUTA = "RUTA";
+    private DetailsPresenter detailsPresenter;
+    private DetailsFragment detailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +34,10 @@ public class DetailsActivity extends AppCompatActivity {
             if (savedInstanceState != null) {
                 return;
             }
-            DetailFragment detailFragment = DetailFragment.newInstance(position);
-            getSupportFragmentManager().beginTransaction().add(R.id.fgContainer, detailFragment).commit();
+            DetailsFragment detailsFragment = DetailsFragment.newInstance(position);
+            getSupportFragmentManager().beginTransaction().add(R.id.fgContainer, detailsFragment).commit();
         }
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -1,4 +1,4 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018;
+package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,15 +22,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.imovil.uo239737.rutassemanasantacaceres2018.RoutesDetail.DetailsActivity;
+import com.imovil.uo239737.rutassemanasantacaceres2018.R;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Model.Ruta;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Settings.SettingsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements CustomOnClick {
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
     public void onClickEvent(int pos) {
         /*
         TWO PANES
-        DetailFragment fragment = DetailFragment.newInstance(pos);
+        DetailsFragment fragment = DetailsFragment.newInstance(pos);
         fragmentManager.beginTransaction().replace(R.id.fragment, fragment).commit();
         */
         Intent intent = new Intent(this, DetailsActivity.class);

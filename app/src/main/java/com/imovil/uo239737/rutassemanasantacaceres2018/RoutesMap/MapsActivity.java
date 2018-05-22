@@ -1,8 +1,9 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018;
+package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesMap;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
+import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,9 +15,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Model.Punto;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
+import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 
 import java.util.ArrayList;
 
@@ -28,10 +33,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<LatLng> trazado;
     PolylineOptions polyOptions;
     Polyline polyline;
+    Marker markerInicio;
+    Marker markerFin;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_maps);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -71,39 +81,87 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        float markerColor;
+        int trazadoColor;
+        String prefColor = setMapTheme();
+
+        switch(prefColor){
+            case "Morado":
+                markerColor = BitmapDescriptorFactory.HUE_MAGENTA;
+                trazadoColor = 0xff660066;
+                break;
+
+            case "Rojo":
+                markerColor = BitmapDescriptorFactory.HUE_RED;
+                trazadoColor = 0xff960000;
+                break;
+
+            case "Azul":
+                markerColor = BitmapDescriptorFactory.HUE_BLUE;
+                trazadoColor = 0xff004789;
+                break;
+
+            case "Verde":
+                markerColor = BitmapDescriptorFactory.HUE_GREEN;
+                trazadoColor = 0xff0b7c2b;
+                break;
+
+            default:
+                System.err.print("Error en el switch de seleccionar color");
+                markerColor = 0;
+                trazadoColor = 0;
+                break;
+        }
+
 
         if(RoutesHolder.getRoutes().get(position).getLugar_llegada() != RoutesHolder.getRoutes().get(position).getLugar_salida()){
-            mMap.addMarker(new MarkerOptions()
+           markerInicio = mMap.addMarker(new MarkerOptions()
                     .position(trazado.get(trazado.size()-1))
                     .title(getString(R.string.marker_title_end) + RoutesHolder.getRoutes().get(position).getLugar_llegada())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
 
-            mMap.addMarker(new MarkerOptions()
+           markerFin = mMap.addMarker(new MarkerOptions()
                     .position(trazado.get(0))
                     .title(getString(R.string.marker_title_start) + RoutesHolder.getRoutes().get(position).getLugar_llegada())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
         }
 
         else{
-            mMap.addMarker(new MarkerOptions()
+            markerInicio = mMap.addMarker(new MarkerOptions()
                     .position(trazado.get(0))
                     .title(getString(R.string.marker_title_startend) + RoutesHolder.getRoutes().get(position).getLugar_llegada())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
         }
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(trazado.get(0)));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
-        pintarTrazado();
+        pintarTrazado(trazadoColor);
+
+
     }
 
-    private void pintarTrazado() {
+    private String setMapTheme() {
+        String prefColor = "Morado"; //Default
+        try{
+            prefColor = prefs.getString("list_preference_color", "Morado");
+        }
+        catch(Exception e){
+            System.err.print("Error al asignar color al trazado");
+        }
+        return prefColor;
+
+
+    }
+
+    private void pintarTrazado(int trazadoColor) {
         polyOptions = new PolylineOptions();
         for(LatLng coord : trazado){
             polyOptions.add(coord);
         }
-        polyOptions.color(0xff660066);
+
+        polyOptions.color(trazadoColor);
         polyOptions.width(25);
         polyline = mMap.addPolyline(polyOptions);
     }
