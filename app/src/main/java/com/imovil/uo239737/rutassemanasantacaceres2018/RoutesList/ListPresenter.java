@@ -1,19 +1,11 @@
 package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesList;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,63 +14,51 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.imovil.uo239737.rutassemanasantacaceres2018.Adapters.CustomOnClick;
-import com.imovil.uo239737.rutassemanasantacaceres2018.RoutesDetail.DetailsActivity;
-import com.imovil.uo239737.rutassemanasantacaceres2018.R;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Adapters.RecyclerViewAdapter;
 import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
 import com.imovil.uo239737.rutassemanasantacaceres2018.Model.Ruta;
-import com.imovil.uo239737.rutassemanasantacaceres2018.Settings.SettingsActivity;
+import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements CustomOnClick {
+/**
+ * Created by Rodry on 23/05/2018.
+ */
 
-    FragmentManager fragmentManager;
-    ListFragment fragment;
-    ArrayList<Ruta> rutas;
-    SharedPreferences prefs;
+public class ListPresenter implements IList.Presenter {
+    private SharedPreferences prefs;
+    private Activity activity;
     private final String url = "http://opendata.caceres.es/GetData/GetData?dataset=om:RutaProcesion&year=2018&format=json";
+    private ArrayList<Ruta> rutas;
+    private IList.View view;
+
+
+    public ListPresenter(Activity activity, SharedPreferences prefs, IList.View view){
+        this.activity = activity;
+        this.prefs = prefs;
+        this.view = view;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        myToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(myToolbar);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-        fragmentManager = getSupportFragmentManager();
-        fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment);
+    public void loadData() {
+        loadRoutesFromJSON();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
 
-    /*
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
 
-    public void loadRoutesFromJSON() {
+    private void loadRoutesFromJSON() {
         if (isOnline()) {
             if (RoutesHolder.getRoutes().size() == 0) {
 
                 rutas = new ArrayList<>();
-                RequestQueue queue = Volley.newRequestQueue(this);
+                RequestQueue queue = Volley.newRequestQueue(activity);
                 JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -101,16 +81,14 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
                                 } catch (Exception e) {
                                     r.setFecha_salida(new Date(0));
                                 }
-                                ;
+
 
                                 rutas.add(r);
                             }
-                            RoutesHolder.setRoutes(fragment.sortRoutes(rutas));
+                            RoutesHolder.setRoutes(sortRoutes(rutas));
 
-                            CharSequence mens = getString(R.string.toast_load_ok);
-                            Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
-                            t.show();
-                            fragment.updateAdapter();
+                            view.showRoutes();
+
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.err.print("Error: onResponse()");
@@ -119,19 +97,23 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        CharSequence mens = getString(R.string.toast_load_fail);
-                        Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
-                        t.show();
-
+                        view.showErrorReq();
                     }
                 });
                 queue.add(req);
             }
+            RoutesHolder.setRoutes(sortRoutes(RoutesHolder.getRoutes()));
+
         } else {
-            CharSequence mens = getString(R.string.toast_no_network);
-            Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
-            t.show();
+            view.showErrorConn();
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
     private void setTrazadoJSON(String value, Ruta r) {
@@ -152,6 +134,39 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
 
     }
 
+    private ArrayList<Ruta> sortRoutes(ArrayList<Ruta> rutas){
+        String sortmode = "Nombre"; //Default
+        try{
+            sortmode = prefs.getString("list_preference_order", "Nombre");
+        }
+        catch(Exception e){
+            System.err.print("Error en el sort del array al cargar prefs");
+        }
+
+        Comparator<Ruta> comp;
+        if (sortmode.equals("Nombre")){
+            comp = new Comparator<Ruta>() {
+                @Override
+                public int compare(Ruta r1, Ruta r2) {
+                    return r1.getNombre().compareTo(r2.getNombre());
+                }
+            };
+        }
+
+        else{
+            comp = new Comparator<Ruta>() {
+                @Override
+                public int compare(Ruta r1, Ruta r2) {
+                    return r1.getFecha_salida().compareTo(r2.getFecha_salida());
+                }
+            };
+        }
+
+        Collections.sort(rutas, comp);
+        return rutas;
+    }
+
+
     private Date dateParser(String JSONdate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {
@@ -164,28 +179,5 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
         return new Date();
     }
 
-*/
-    @Override
-    public void onClickEvent(int pos) {
-        /*
-        TWO PANES
-        DetailsFragment fragment = DetailsFragment.newInstance(pos);
-        fragmentManager.beginTransaction().replace(R.id.fragment, fragment).commit();
-        */
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.RUTA, pos);
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        if (item.getItemId() ==  R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

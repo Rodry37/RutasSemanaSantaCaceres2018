@@ -1,4 +1,4 @@
-package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesList;
+package com.imovil.uo239737.rutassemanasantacaceres2018.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

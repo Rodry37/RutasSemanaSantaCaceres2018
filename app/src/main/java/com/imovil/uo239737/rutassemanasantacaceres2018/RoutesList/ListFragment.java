@@ -3,6 +3,8 @@ package com.imovil.uo239737.rutassemanasantacaceres2018.RoutesList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -12,24 +14,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Adapters.CustomOnClick;
+import com.imovil.uo239737.rutassemanasantacaceres2018.Adapters.RecyclerViewAdapter;
 import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
 import com.imovil.uo239737.rutassemanasantacaceres2018.Model.Ruta;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Created by Rodry on 19/03/2018.
  */
 
-public class ListFragment extends Fragment  {
+public class ListFragment extends Fragment implements IList.View  {
 
     SharedPreferences prefs;
     RecyclerViewAdapter adapter;
     private CustomOnClick customOnClick;
+    IList.Presenter presenter;
 
     public static ListFragment newInstance() {
 
@@ -57,6 +73,7 @@ public class ListFragment extends Fragment  {
         }
     }
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -69,14 +86,15 @@ public class ListFragment extends Fragment  {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        presenter = new ListPresenter(getActivity(), prefs, this);
 
         return rootView;
     }
 
     @Override
     public void onResume() {
-        RoutesHolder.setRoutes(sortRoutes(RoutesHolder.getRoutes()));
-        updateAdapter();
+        presenter.loadData();
+        adapter.notifyDataSetChanged();
         super.onResume();
     }
 
@@ -117,4 +135,26 @@ public class ListFragment extends Fragment  {
         return rutas;
     }
 
+
+    @Override
+    public void showErrorConn() {
+        CharSequence mens = getString(R.string.toast_no_network);
+        Toast t = Toast.makeText(getActivity().getApplicationContext(), mens, Toast.LENGTH_SHORT);
+        t.show();
+    }
+
+    @Override
+    public void showErrorReq() {
+        CharSequence mens = getString(R.string.toast_load_fail);
+        Toast t = Toast.makeText(getActivity().getApplicationContext(), mens, Toast.LENGTH_SHORT);
+        t.show();
+    }
+
+    @Override
+    public void showRoutes() {
+        adapter.notifyDataSetChanged();
+        CharSequence mens = getString(R.string.toast_load_ok);
+        Toast t = Toast.makeText(getActivity().getApplicationContext(), mens, Toast.LENGTH_SHORT);
+        t.show();
+    }
 }
