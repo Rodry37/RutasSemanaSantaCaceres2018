@@ -15,5 +15,7 @@ public class RoutesHolder {
         return list;
     }
 
-    public static void setRoutes(ArrayList<Ruta> rutas) {RoutesHolder.list = rutas;}
+    public static void setRoutes(ArrayList<Ruta> rutas) {
+        RoutesHolder.list = rutas;
+    }
 }

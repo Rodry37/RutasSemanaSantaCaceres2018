@@ -8,17 +8,24 @@
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
 
     <ListPreference
-        android:defaultValue="3"
+        android:defaultValue="Morado"
         android:entries="@array/prefs_color"
         android:entryValues="@array/prefs_color"
         android:key="list_preference_color"
         android:summary="%s"
         android:title="@string/prefs_color_title" />
     <ListPreference
-        android:defaultValue="0"
+        android:defaultValue="Nombre"
         android:entries="@array/prefs_order"
         android:entryValues="@array/prefs_order"
         android:key="list_preference_order"
         android:summary="%s"
         android:title="@string/prefs_order_title" />
+    <ListPreference
+        android:defaultValue="Nombre"
+        android:entries="@array/prefs_filter"
+        android:entryValues="@array/prefs_filter"
+        android:key="list_preference_filter"
+        android:summary="%s"
+        android:title="@string/prefs_filter" />
 </PreferenceScreen>

@@ -4,7 +4,7 @@
     <string name="toast_load_fail">Error al cargar los datos</string>
     <string name="toast_no_network">No se ha podido establecer una conexión</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="details_nombre">Nombre:</string>
     <string name="details_salida">Lugar de salida:</string>
@@ -75,6 +75,8 @@
     <string name="prefs_order_name">Nombre</string>
     <string name="prefs_order_day">Día</string>
     <string name="menu_settings_title">Ajustes</string>
+    <string name="prefs_filter">Filtrar Rutas por:</string>
+    <string name="menu_search_title">Buscar:</string>
 
     <!-- Example settings for Notifications -->
 

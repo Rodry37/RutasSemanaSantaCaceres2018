@@ -42,10 +42,10 @@ import java.util.Date;
 
 public class ListFragment extends Fragment implements IList.View  {
 
-    SharedPreferences prefs;
-    RecyclerViewAdapter adapter;
+    private SharedPreferences prefs;
+    private RecyclerViewAdapter adapter;
     private CustomOnClick customOnClick;
-    IList.Presenter presenter;
+    private IList.Presenter presenter;
 
     public static ListFragment newInstance() {
 
@@ -94,14 +94,9 @@ public class ListFragment extends Fragment implements IList.View  {
     @Override
     public void onResume() {
         presenter.loadData();
-        adapter.notifyDataSetChanged();
         super.onResume();
     }
 
-
-    public void updateAdapter(){
-        adapter.notifyDataSetChanged();
-    }
 
     public ArrayList<Ruta> sortRoutes(ArrayList<Ruta> rutas){
         String sortmode = "Nombre"; //Default
@@ -151,10 +146,19 @@ public class ListFragment extends Fragment implements IList.View  {
     }
 
     @Override
-    public void showRoutes() {
-        adapter.notifyDataSetChanged();
+    public void showRoutes(ArrayList<Ruta> rutas) {
+        setAdapterRoutes(rutas);
         CharSequence mens = getString(R.string.toast_load_ok);
         Toast t = Toast.makeText(getActivity().getApplicationContext(), mens, Toast.LENGTH_SHORT);
         t.show();
+    }
+
+    @Override
+    public void setAdapterRoutes(ArrayList<Ruta> rutas) {
+        adapter.setRutas(rutas);
+    }
+
+    public RecyclerViewAdapter getAdapter(){
+        return adapter;
     }
 }

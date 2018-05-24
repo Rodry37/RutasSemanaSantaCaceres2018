@@ -85,9 +85,10 @@ public class ListPresenter implements IList.Presenter {
 
                                 rutas.add(r);
                             }
-                            RoutesHolder.setRoutes(sortRoutes(rutas));
+                            rutas = sortRoutes(rutas);
+                            RoutesHolder.setRoutes(rutas);
 
-                            view.showRoutes();
+                            view.showRoutes(rutas);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -103,7 +104,7 @@ public class ListPresenter implements IList.Presenter {
                 queue.add(req);
             }
             RoutesHolder.setRoutes(sortRoutes(RoutesHolder.getRoutes()));
-
+            view.setAdapterRoutes(sortRoutes(RoutesHolder.getRoutes()));
         } else {
             view.showErrorConn();
         }
