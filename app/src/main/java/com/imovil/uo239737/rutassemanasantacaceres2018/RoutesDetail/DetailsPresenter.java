@@ -12,11 +12,13 @@ import java.util.ArrayList;
 public class DetailsPresenter implements IDetails.Presenter {
 
     private IDetails.View view;
+    private String uri;
     private int position;
 
-    public DetailsPresenter(IDetails.View view, int position){
+    public DetailsPresenter(IDetails.View view, String uri){
         this.view = view;
-        this.position = position;
+        this.uri = uri;
+        this.position = getRuta(uri);
     }
 
 
@@ -54,5 +56,16 @@ public class DetailsPresenter implements IDetails.Presenter {
     @Override
     public int getPosition() {
         return position;
+    }
+
+    private int getRuta(String uri){
+        int i = 0;
+        for (Ruta r : RoutesHolder.getRoutes()){
+            if(r.getUri().equals(uri))
+                return i;
+            else
+                i++;
+        }
+        return i;
     }
 }

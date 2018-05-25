@@ -34,10 +34,10 @@ public class DetailsFragment extends Fragment implements Button.OnClickListener,
         // Required empty public constructor
     }
 
-    public static DetailsFragment newInstance(int position) {
+    public static DetailsFragment newInstance(String uri) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
-        args.putInt(ROUTE_ARG, position);
+        args.putString(ROUTE_ARG, uri);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +63,7 @@ public class DetailsFragment extends Fragment implements Button.OnClickListener,
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.detail_fragment, container, false);
 
-        presenter = new DetailsPresenter(this, getArguments().getInt(ROUTE_ARG, 0));
+        presenter = new DetailsPresenter(this, getArguments().getString(ROUTE_ARG));
         lbNombre = rootview.findViewById(R.id.lbNombre);
         lbSalida = rootview.findViewById(R.id.lbSalida);
         lbLlegada = rootview.findViewById(R.id.lbLlegada);

@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
     ArrayList<Ruta> rutas;
     SharedPreferences prefs;
     private final String url = "http://opendata.caceres.es/GetData/GetData?dataset=om:RutaProcesion&year=2018&format=json";
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +67,19 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
         inflater.inflate(R.menu.main_menu, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                fragment.getAdapter().filter(query);
+                fragment.getAdapter().filter(query, prefs.getString("list_preference_filter", "Nombre"));
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                fragment.getAdapter().filter(newText);
+                fragment.getAdapter().filter(newText, prefs.getString("list_preference_filter", "Nombre"));
                 return true;
             }
         });
@@ -86,116 +87,21 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
         return true;
     }
 
-
-    /*
-    public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
     }
 
-    public void loadRoutesFromJSON() {
-        if (isOnline()) {
-            if (RoutesHolder.getRoutes().size() == 0) {
-
-                rutas = new ArrayList<>();
-                RequestQueue queue = Volley.newRequestQueue(this);
-                JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            response = response.getJSONObject("results");
-                            JSONArray data = response.getJSONArray("bindings");
-                            for (int i = 0; i < data.length(); i++) {
-                                Ruta r = new Ruta();
-                                r.setUri(data.getJSONObject(i).getJSONObject("uri").getString("value"));
-                                r.setNombre(data.getJSONObject(i).getJSONObject("rdfs_label").getString("value"));
-                                r.setLugar_salida(data.getJSONObject(i).getJSONObject("om_sitioDeSalida").getString("value"));
-                                r.setLugar_llegada(data.getJSONObject(i).getJSONObject("om_sitioDeRecogida").getString("value"));
-                                r.setDia(data.getJSONObject(i).getJSONObject("time_day").getString("value"));
-                                r.setPasos_Asociados(getPasosJSON(data.getJSONObject(i).getJSONObject("pasosAsociados").getString("value")));
-                                setTrazadoJSON(data.getJSONObject(i).getJSONObject("locn_geometry").getString("value"), r);
-
-                                //date has to be inside a try because some objects of the JSONArray do not have the 'time_at' value
-                                try {
-                                    r.setFecha_salida(dateParser(data.getJSONObject(i).getJSONObject("time_at").getString("value")));
-                                } catch (Exception e) {
-                                    r.setFecha_salida(new Date(0));
-                                }
-                                ;
-
-                                rutas.add(r);
-                            }
-                            RoutesHolder.setRoutes(fragment.sortRoutes(rutas));
-
-                            CharSequence mens = getString(R.string.toast_load_ok);
-                            Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
-                            t.show();
-                            fragment.updateAdapter();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.err.print("Error: onResponse()");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        CharSequence mens = getString(R.string.toast_load_fail);
-                        Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
-                        t.show();
-
-                    }
-                });
-                queue.add(req);
-            }
-        } else {
-            CharSequence mens = getString(R.string.toast_no_network);
-            Toast t = Toast.makeText(getApplicationContext(), mens, Toast.LENGTH_SHORT);
-            t.show();
-        }
-    }
-
-    private void setTrazadoJSON(String value, Ruta r) {
-
-        String[] puntosSTR = value.replace("[", "").replace("]", "").split(",");
-        for (int i = 0; i < puntosSTR.length; i = i + 2) {
-            r.addTrazado(Double.parseDouble(puntosSTR[i + 1]), Double.parseDouble(puntosSTR[i]));
-        }
-    }
-
-    private ArrayList<String> getPasosJSON(String string) {
-        ArrayList<String> pasos = new ArrayList<>();
-        String[] pasos_uri = string.split(";");
-        for (String s : pasos_uri) {
-            pasos.add(s);
-        }
-        return pasos;
-
-    }
-
-    private Date dateParser(String JSONdate) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        try {
-            Date d = format.parse(JSONdate);
-            return d;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.print("Error while parsing date");
-        }
-        return new Date();
-    }
-
-*/
     @Override
-    public void onClickEvent(int pos) {
+    public void onClickEvent(String uri) {
         /*
         TWO PANES
         DetailsFragment fragment = DetailsFragment.newInstance(pos);
         fragmentManager.beginTransaction().replace(R.id.fragment, fragment).commit();
         */
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.RUTA, pos);
+        intent.putExtra(DetailsActivity.RUTA, uri);
         startActivity(intent);
     }
 

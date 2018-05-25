@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 
 public class DetailsActivity extends AppCompatActivity {
-    int position;
+    String uri;
     public static final String RUTA = "RUTA";
     private DetailsPresenter detailsPresenter;
     private DetailsFragment detailsFragment;
@@ -19,7 +19,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        position =  intent.getIntExtra(DetailsActivity.RUTA, 0);
+        uri =  intent.getStringExtra(DetailsActivity.RUTA);
         setContentView(R.layout.detail_activity);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -34,7 +34,7 @@ public class DetailsActivity extends AppCompatActivity {
             if (savedInstanceState != null) {
                 return;
             }
-            DetailsFragment detailsFragment = DetailsFragment.newInstance(position);
+            DetailsFragment detailsFragment = DetailsFragment.newInstance(uri);
             getSupportFragmentManager().beginTransaction().add(R.id.fgContainer, detailsFragment).commit();
         }
 

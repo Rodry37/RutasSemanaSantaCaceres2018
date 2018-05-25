@@ -5,5 +5,5 @@ package com.imovil.uo239737.rutassemanasantacaceres2018.Adapters;
  */
 
 public interface CustomOnClick {
-        void onClickEvent(int pos);
+        void onClickEvent(String uri);
 }

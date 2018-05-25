@@ -72,12 +72,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void onClick(View view) {
 
-            customOnClick.onClickEvent(getLayoutPosition());
+            customOnClick.onClickEvent(rutas.get(getLayoutPosition()).getUri());
         }
     }
 
     //Este metodo debe recibir el metodo de filtrado como parámetro
-    public void filter(String query){
+    public void filter(String query, String method){
         rutas.clear();
         if(query.isEmpty())
             rutas.addAll(rutasCopy);
@@ -86,9 +86,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             query = query.toLowerCase();
             //switch para saber como filtrar
             //Para los pasos, primero meterlos en un string largo para evitar bucles for anidados
-            for(Ruta r : rutasCopy)
-                if(r.getNombre().toLowerCase().contains(query))
-                    rutas.add(r);
+            switch(method){
+                case "Nombre":
+                    for(Ruta r : rutasCopy)
+                        if(r.getNombre().toLowerCase().contains(query))
+                            rutas.add(r);
+                    break;
+
+                case "Lugar de Salida":
+                    for(Ruta r : rutasCopy)
+                        if(r.getLugar_salida().toLowerCase().contains(query))
+                            rutas.add(r);
+                    break;
+
+                case "Pasos Asociados":
+                    for(Ruta r :rutasCopy)
+                        for(String paso : r.getPasos_Asociados()) {
+                            String[] pasosformatsplitted = paso.split("/");
+                            if(pasosformatsplitted[pasosformatsplitted.length - 1].replace('-', ' ').contains(query))
+                                rutas.add(r);
+                        }
+                    break;
+            }
+
+
 
         }
         notifyDataSetChanged();
