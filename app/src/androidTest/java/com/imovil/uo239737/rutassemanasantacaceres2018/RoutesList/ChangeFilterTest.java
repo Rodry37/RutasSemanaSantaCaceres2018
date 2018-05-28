@@ -24,10 +24,14 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -36,13 +40,13 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ChangeSettingsTest {
+public class ChangeFilterTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void changeSettingsTest() {
+    public void changeFilterTest() {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         ViewInteraction appCompatTextView = onView(
@@ -60,7 +64,7 @@ public class ChangeSettingsTest {
                         childAtPosition(
                                 withClassName(is("android.widget.LinearLayout")),
                                 0)))
-                .atPosition(0);
+                .atPosition(2);
         linearLayout.perform(click());
 
         DataInteraction checkedTextView = onData(anything())
@@ -68,18 +72,43 @@ public class ChangeSettingsTest {
                         childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)))
-                .atPosition(1);
+                .atPosition(2);
         checkedTextView.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(android.R.id.summary), withText("Azul"),
+        pressBack();
+
+        ViewInteraction appCompatImageView = onView(
+                allOf(withId(R.id.search_button), withContentDescription("Buscar"),
                         childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                        0),
+                                allOf(withId(R.id.search_bar),
+                                        childAtPosition(
+                                                withId(R.id.action_search),
+                                                0)),
                                 1),
                         isDisplayed()));
-        textView.check(matches(withText("Azul")));
+        appCompatImageView.perform(click());
+
+        ViewInteraction searchAutoComplete = onView(
+                allOf(withId(R.id.search_src_text),
+                        childAtPosition(
+                                allOf(withId(R.id.search_plate),
+                                        childAtPosition(
+                                                withId(R.id.search_edit_frame),
+                                                1)),
+                                0),
+                        isDisplayed()));
+        searchAutoComplete.perform(replaceText("p"), closeSoftKeyboard());
+
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.rvItems),
+                        childAtPosition(
+                                allOf(withId(R.id.fragment),
+                                        childAtPosition(
+                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
+                                                1)),
+                                0),
+                        isDisplayed()));
+        recyclerView.check(matches(isDisplayed()));
 
     }
 

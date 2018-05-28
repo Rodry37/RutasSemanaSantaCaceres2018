@@ -17,7 +17,7 @@
     <string name="marker_title_start">"Inicio de la ruta: "</string>
     <string name="marker_title_end">Fin de la ruta:</string>
     <string name="marker_title_startend">Inicio y fin de la ruta:</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Ajustes</string>
 
     <!-- Strings related to Settings -->
 
@@ -77,6 +77,7 @@
     <string name="menu_settings_title">Ajustes</string>
     <string name="prefs_filter">Filtrar Rutas por:</string>
     <string name="menu_search_title">Buscar:</string>
+    <string name="details_date_invalid">Fecha no disponible</string>
 
     <!-- Example settings for Notifications -->
 

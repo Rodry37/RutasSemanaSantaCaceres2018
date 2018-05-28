@@ -14,7 +14,6 @@ import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +25,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -46,13 +44,13 @@ public class ShowMapTest {
                         childAtPosition(
                                 withId(R.id.fragment),
                                 0)));
-        recyclerView.perform(actionOnItemAtPosition(1, click()));
+        recyclerView.perform(actionOnItemAtPosition(3, click()));
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.btMap), withText("Ver en el mapa"),
                         childAtPosition(
                                 childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
+                                        withClassName(is("android.widget.ScrollView")),
                                         0),
                                 6)));
         appCompatButton.perform(scrollTo(), click());
@@ -66,16 +64,15 @@ public class ShowMapTest {
             e.printStackTrace();
         }
 
-        ViewInteraction view = onView(
-                allOf(withContentDescription("Fin de la ruta:Ermita de la Paz. "),
+        ViewInteraction frameLayout = onView(
+                allOf(withId(R.id.map),
                         childAtPosition(
-                                allOf(withContentDescription("Google Maps"),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                                1)),
-                                0),
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
                         isDisplayed()));
-        view.check(matches(isDisplayed()));
+        frameLayout.check(matches(isDisplayed()));
 
     }
 
