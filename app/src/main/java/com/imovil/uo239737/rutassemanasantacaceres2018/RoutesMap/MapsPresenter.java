@@ -14,6 +14,9 @@ import java.util.ArrayList;
  * Created by Rodry on 24/05/2018.
  */
 
+/*
+Presenter for the Maps activity
+ */
 public class MapsPresenter implements IMaps.Presenter {
     private int position;
     private SharedPreferences prefs;
@@ -26,6 +29,7 @@ public class MapsPresenter implements IMaps.Presenter {
         color = getMapTheme();
     }
 
+    //load the coords into the 'trazado' var
     @Override
     public void loadTrazado() {
         if(trazado == null) {
@@ -37,6 +41,7 @@ public class MapsPresenter implements IMaps.Presenter {
         }
     }
 
+    //Get the color of the marker from the user preferences
     @Override
     public float getMarkercolor() {
         switch(color){
@@ -58,6 +63,7 @@ public class MapsPresenter implements IMaps.Presenter {
         }
     }
 
+    //Get the color of the route from the user preferences
     @Override
     public int getTrazadocolor() {
         switch(color){
@@ -96,6 +102,7 @@ public class MapsPresenter implements IMaps.Presenter {
         return RoutesHolder.getRoutes().get(position).getLugar_llegada();
     }
 
+    //Getting the user preferences
     private String getMapTheme(){
         String prefColor = "Morado"; //Default
         try{

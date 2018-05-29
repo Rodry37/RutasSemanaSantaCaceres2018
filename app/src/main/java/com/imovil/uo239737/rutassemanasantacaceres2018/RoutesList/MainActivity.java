@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,60 +14,56 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.imovil.uo239737.rutassemanasantacaceres2018.Adapters.CustomOnClick;
 import com.imovil.uo239737.rutassemanasantacaceres2018.RoutesDetail.DetailsActivity;
 import com.imovil.uo239737.rutassemanasantacaceres2018.R;
-import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
-import com.imovil.uo239737.rutassemanasantacaceres2018.Model.Ruta;
+import com.imovil.uo239737.rutassemanasantacaceres2018.RoutesDetail.DetailsFragment;
 import com.imovil.uo239737.rutassemanasantacaceres2018.Settings.SettingsActivity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
+/*
+First activity to create when the app is launching
+ */
 public class MainActivity extends AppCompatActivity implements CustomOnClick {
 
     FragmentManager fragmentManager;
     ListFragment fragment;
-    ArrayList<Ruta> rutas;
     SharedPreferences prefs;
-    private final String url = "http://opendata.caceres.es/GetData/GetData?dataset=om:RutaProcesion&year=2018&format=json";
     SearchView searchView;
+    boolean twoPanes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setContentView(R.layout.main);
+        //Checking if it's a tablet or a smartphone
+        if (findViewById(R.id.frame_two_panes) != null) {
+            twoPanes = true;
+        }
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         myToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(myToolbar);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-
         fragmentManager = getSupportFragmentManager();
-        fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment);
+        if(twoPanes)
+            fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment_list_2panes);
+
+        else
+            fragment = (ListFragment) fragmentManager.findFragmentById(R.id.fragment);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
 
+        //SearchManager for the filter
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
+        //Whenever a char is typed, it filters the list by the method selected in prefs
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -83,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
                 return true;
             }
         });
-
         return true;
     }
 
@@ -95,14 +88,16 @@ public class MainActivity extends AppCompatActivity implements CustomOnClick {
 
     @Override
     public void onClickEvent(String uri) {
-        /*
-        TWO PANES
-        DetailsFragment fragment = DetailsFragment.newInstance(pos);
-        fragmentManager.beginTransaction().replace(R.id.fragment, fragment).commit();
-        */
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.RUTA, uri);
-        startActivity(intent);
+
+        if(twoPanes) {
+            DetailsFragment fragment = DetailsFragment.newInstance(uri );
+            fragmentManager.beginTransaction().replace(R.id.frame_two_panes, fragment).commit();
+        }
+        else {
+            Intent intent = new Intent(this, DetailsActivity.class);
+            intent.putExtra(DetailsActivity.RUTA, uri);
+            startActivity(intent);
+        }
     }
 
     @Override

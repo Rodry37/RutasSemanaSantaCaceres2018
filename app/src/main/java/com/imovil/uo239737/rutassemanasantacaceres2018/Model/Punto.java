@@ -4,6 +4,10 @@ package com.imovil.uo239737.rutassemanasantacaceres2018.Model;
  * Created by Rodry on 17/05/2018.
  */
 
+/*
+Represent a LatLng position.
+Similar to the LatLng object from Google Maps API
+ */
 public class Punto {
     double Latitud;
     double Longitud;

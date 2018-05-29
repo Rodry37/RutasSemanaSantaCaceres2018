@@ -18,6 +18,9 @@ import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/*
+Fragment for the Details Activity class
+ */
 public class DetailsFragment extends Fragment implements Button.OnClickListener, IDetails.View{
     private static final String ROUTE_ARG = "route";
     private DetailsPresenter presenter;
@@ -42,8 +45,6 @@ public class DetailsFragment extends Fragment implements Button.OnClickListener,
         return fragment;
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,10 @@ public class DetailsFragment extends Fragment implements Button.OnClickListener,
 
     @Override
     public void onStart(){
+        /*
+        Data is showed on the onStart method because of it is done
+        in the onCreateView it can raise a presenter exception
+        */
         if(presenter != null)
             presenter.getData();
 
@@ -63,34 +68,20 @@ public class DetailsFragment extends Fragment implements Button.OnClickListener,
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.detail_fragment, container, false);
 
-        presenter = new DetailsPresenter(this, getArguments().getString(ROUTE_ARG));
-        lbNombre = rootview.findViewById(R.id.lbNombre);
-        lbSalida = rootview.findViewById(R.id.lbSalida);
-        lbLlegada = rootview.findViewById(R.id.lbLlegada);
-        lbURI = rootview.findViewById(R.id.lbURI);
-        lbFechasalida =  rootview.findViewById(R.id.lbFechasalida);
-        lbPasos =  rootview.findViewById(R.id.lbPasos);
-        btMap =   rootview.findViewById(R.id.btMap);
+        if(getArguments() != null) {
+            presenter = new DetailsPresenter(this, getArguments().getString(ROUTE_ARG));
+            lbNombre = rootview.findViewById(R.id.lbNombre);
+            lbSalida = rootview.findViewById(R.id.lbSalida);
+            lbLlegada = rootview.findViewById(R.id.lbLlegada);
+            lbURI = rootview.findViewById(R.id.lbURI);
+            lbFechasalida = rootview.findViewById(R.id.lbFechasalida);
+            lbPasos = rootview.findViewById(R.id.lbPasos);
+            btMap = rootview.findViewById(R.id.btMap);
 
-
-        btMap.setOnClickListener(this);
-
+            btMap.setOnClickListener(this);
+        }
         return rootview;
     }
-
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-
 
     @Override
     public void onClick(View view) {
@@ -108,10 +99,12 @@ public class DetailsFragment extends Fragment implements Button.OnClickListener,
         lbSalida.setText(ruta.getLugar_salida());
         lbLlegada.setText(ruta.getLugar_llegada());
         lbURI.setText(ruta.getUri());
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        lbFechasalida.setText(dateformat.format(ruta.getFecha_salida()));
+        if(ruta.getFecha_salida().getTime() == 0)
+            lbFechasalida.setText(getString(R.string.details_date_invalid));
+        else {
+            SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            lbFechasalida.setText(dateformat.format(ruta.getFecha_salida()) + " h.");
+        }
         lbPasos.setText(presenter.formatPasos(ruta.getPasos_Asociados()));
     }
-
-
 }

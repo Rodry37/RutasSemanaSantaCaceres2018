@@ -8,10 +8,12 @@ import java.util.ArrayList;
  * Created by Rodry on 24/05/2018.
  */
 
-public interface IMaps {
-    interface View{
+/*
+This represets the contract with the View and the Presenter
+ */
 
-    }
+public interface IMaps {
+    interface View{}
 
     interface Presenter {
         void loadTrazado();

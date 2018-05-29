@@ -32,6 +32,9 @@ import java.util.Date;
  * Created by Rodry on 23/05/2018.
  */
 
+/*
+Presenter of the activity for the list of routes
+ */
 public class ListPresenter implements IList.Presenter {
     private SharedPreferences prefs;
     private Activity activity;
@@ -51,12 +54,11 @@ public class ListPresenter implements IList.Presenter {
         loadRoutesFromJSON();
     }
 
-
-
+    //Volley request for getting the routes from the url
     private void loadRoutesFromJSON() {
         if (isOnline()) {
+            //If we already have routes in the singleton, no request is made
             if (RoutesHolder.getRoutes().size() == 0) {
-
                 rutas = new ArrayList<>();
                 RequestQueue queue = Volley.newRequestQueue(activity);
                 JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -81,15 +83,11 @@ public class ListPresenter implements IList.Presenter {
                                 } catch (Exception e) {
                                     r.setFecha_salida(new Date(0));
                                 }
-
-
                                 rutas.add(r);
                             }
                             rutas = sortRoutes(rutas);
                             RoutesHolder.setRoutes(rutas);
-
                             view.showRoutes(rutas);
-
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.err.print("Error: onResponse()");
@@ -110,6 +108,7 @@ public class ListPresenter implements IList.Presenter {
         }
     }
 
+    //Check if we have connection
     private boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager)
                 activity.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -117,14 +116,15 @@ public class ListPresenter implements IList.Presenter {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
+    //Formating the LatLng positions
     private void setTrazadoJSON(String value, Ruta r) {
-
         String[] puntosSTR = value.replace("[", "").replace("]", "").split(",");
         for (int i = 0; i < puntosSTR.length; i = i + 2) {
             r.addTrazado(Double.parseDouble(puntosSTR[i + 1]), Double.parseDouble(puntosSTR[i]));
         }
     }
 
+    //Formating the floats
     private ArrayList<String> getPasosJSON(String string) {
         ArrayList<String> pasos = new ArrayList<>();
         String[] pasos_uri = string.split(";");
@@ -135,6 +135,7 @@ public class ListPresenter implements IList.Presenter {
 
     }
 
+    //Method for sorting routes with the user preference selected
     private ArrayList<Ruta> sortRoutes(ArrayList<Ruta> rutas){
         String sortmode = "Nombre"; //Default
         try{
@@ -145,29 +146,28 @@ public class ListPresenter implements IList.Presenter {
         }
 
         Comparator<Ruta> comp;
-        if (sortmode.equals("Nombre")){
+        if (sortmode.equals("Nombre"))
             comp = new Comparator<Ruta>() {
                 @Override
                 public int compare(Ruta r1, Ruta r2) {
                     return r1.getNombre().compareTo(r2.getNombre());
                 }
             };
-        }
 
-        else{
+
+        else
             comp = new Comparator<Ruta>() {
                 @Override
                 public int compare(Ruta r1, Ruta r2) {
                     return r1.getFecha_salida().compareTo(r2.getFecha_salida());
                 }
             };
-        }
 
         Collections.sort(rutas, comp);
         return rutas;
     }
 
-
+    //Parse the Date
     private Date dateParser(String JSONdate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {

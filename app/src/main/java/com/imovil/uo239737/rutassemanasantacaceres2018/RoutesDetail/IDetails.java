@@ -8,6 +8,9 @@ import java.util.ArrayList;
  * Created by Rodry on 22/05/2018.
  */
 
+/*
+This represets the contract with the View and the Presenter
+ */
 public interface IDetails {
     interface View{
         void printRuta(Ruta ruta);

@@ -40,6 +40,9 @@ import java.util.Date;
  * Created by Rodry on 19/03/2018.
  */
 
+/*
+Fragment for the Main Activity which hold the RecyclerViewAdapter
+ */
 public class ListFragment extends Fragment implements IList.View  {
 
     private SharedPreferences prefs;
@@ -48,7 +51,6 @@ public class ListFragment extends Fragment implements IList.View  {
     private IList.Presenter presenter;
 
     public static ListFragment newInstance() {
-
         ListFragment fragment = new ListFragment();
         return fragment;
     }
@@ -80,7 +82,7 @@ public class ListFragment extends Fragment implements IList.View  {
         View rootView;
         rootView = inflater.inflate(R.layout.list_fragment, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rvItems);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rvItems);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -93,43 +95,13 @@ public class ListFragment extends Fragment implements IList.View  {
 
     @Override
     public void onResume() {
+        /*
+        We lead the data every time the fragment is shown to ensure
+        that the data is shown correctly
+         */
         presenter.loadData();
         super.onResume();
     }
-
-
-    public ArrayList<Ruta> sortRoutes(ArrayList<Ruta> rutas){
-        String sortmode = "Nombre"; //Default
-        try{
-            sortmode = prefs.getString("list_preference_order", "Nombre");
-        }
-        catch(Exception e){
-            System.err.print("Error en el sort del array al cargar prefs");
-        }
-
-        Comparator<Ruta> comp;
-        if (sortmode.equals("Nombre")){
-            comp = new Comparator<Ruta>() {
-                @Override
-                public int compare(Ruta r1, Ruta r2) {
-                    return r1.getNombre().compareTo(r2.getNombre());
-                }
-            };
-        }
-
-        else{
-            comp = new Comparator<Ruta>() {
-                @Override
-                public int compare(Ruta r1, Ruta r2) {
-                    return r1.getFecha_salida().compareTo(r2.getFecha_salida());
-                }
-            };
-        }
-
-        Collections.sort(rutas, comp);
-        return rutas;
-    }
-
 
     @Override
     public void showErrorConn() {

@@ -9,6 +9,9 @@ import java.util.ArrayList;
  * Created by Rodry on 22/05/2018.
  */
 
+/*
+Presenter of the activity for the details of the Route
+ */
 public class DetailsPresenter implements IDetails.Presenter {
 
     private IDetails.View view;
@@ -21,7 +24,7 @@ public class DetailsPresenter implements IDetails.Presenter {
         this.position = getRuta(uri);
     }
 
-
+    //Method for formatting the floats so they are easy-readable for the user when shown
     @Override
     public String formatPasos(ArrayList<String> pasos) {
         String pasosformat = "";
@@ -45,12 +48,12 @@ public class DetailsPresenter implements IDetails.Presenter {
         return pasosformat;
     }
 
+    //Tell the view to show the route passed as parameter in printRuta()
     @Override
     public void getData() {
         Ruta ruta = RoutesHolder.getRoutes().get(position);
         if(view != null)
             view.printRuta(ruta);
-
     }
 
     @Override
@@ -58,6 +61,7 @@ public class DetailsPresenter implements IDetails.Presenter {
         return position;
     }
 
+    //Given the uri, retrieve the route
     private int getRuta(String uri){
         int i = 0;
         for (Ruta r : RoutesHolder.getRoutes()){

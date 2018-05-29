@@ -8,6 +8,10 @@ import java.util.Date;
  * Created by Rodry on 16/03/2018.
  */
 
+
+/*
+Custom object to store the routes downloaded from the .json file
+ */
 @SuppressWarnings("serial")
 public class Ruta implements Serializable{
     private String Uri;

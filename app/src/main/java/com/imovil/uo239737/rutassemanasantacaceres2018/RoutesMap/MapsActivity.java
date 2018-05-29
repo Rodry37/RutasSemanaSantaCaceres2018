@@ -19,12 +19,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.imovil.uo239737.rutassemanasantacaceres2018.Model.Punto;
-import com.imovil.uo239737.rutassemanasantacaceres2018.Model.RoutesHolder;
 import com.imovil.uo239737.rutassemanasantacaceres2018.R;
 
-import java.util.ArrayList;
-
+/*
+Activity to show the map
+The fragment is created in within this class
+ */
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, IMaps.View {
 
     private GoogleMap mMap;
@@ -75,7 +75,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         float markerColor = presenter.getMarkercolor();
         int trazadoColor = presenter.getTrazadocolor();
 
-
         if(!presenter.getLugarLlegada().equals(presenter.getLugarSalida())){
            markerInicio = mMap.addMarker(new MarkerOptions()
                     .position(presenter.getTrazado().get(presenter.getTrazado().size()-1))
@@ -100,15 +99,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
         pintarTrazado(trazadoColor);
-
-
     }
 
     private void pintarTrazado(int trazadoColor) {
         polyOptions = new PolylineOptions();
-        for(LatLng coord : presenter.getTrazado()){
+        for(LatLng coord : presenter.getTrazado())
             polyOptions.add(coord);
-        }
+
 
         polyOptions.color(trazadoColor);
         polyOptions.width(25);
@@ -117,9 +114,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home)
             finish(); // close this activity and return to preview activity (if there is any)
-        }
 
         return super.onOptionsItemSelected(item);
     }

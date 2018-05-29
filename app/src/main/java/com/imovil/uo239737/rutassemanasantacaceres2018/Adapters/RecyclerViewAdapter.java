@@ -22,6 +22,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public LayoutInflater inflater;
     CustomOnClick customOnClick;
+    //We are creating two vars for filtering.
     ArrayList<Ruta> rutas;
     ArrayList<Ruta> rutasCopy;
 
@@ -51,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.rutas = (ArrayList<Ruta>) rutas.clone();
         if(rutasCopy.size()==0)
             rutasCopy.addAll(rutas);
+
         notifyDataSetChanged();
     }
 
@@ -71,12 +73,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View view) {
-
             customOnClick.onClickEvent(rutas.get(getLayoutPosition()).getUri());
         }
     }
 
-    //Este metodo debe recibir el metodo de filtrado como parámetro
+    /*
+    Method to filter the elements in the RecyclerView
+    rutasCopy hold a a copy of all the elements to display
+    rutas is modified to only show the elements that match the filter
+     */
     public void filter(String query, String method){
         rutas.clear();
         if(query.isEmpty())
@@ -84,8 +89,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         else{
             query = query.toLowerCase();
-            //switch para saber como filtrar
-            //Para los pasos, primero meterlos en un string largo para evitar bucles for anidados
             switch(method){
                 case "Nombre":
                     for(Ruta r : rutasCopy)
@@ -108,9 +111,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         }
                     break;
             }
-
-
-
         }
         notifyDataSetChanged();
     }
